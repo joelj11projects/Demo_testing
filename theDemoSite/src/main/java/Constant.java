@@ -6,7 +6,7 @@ public class Constant {
 
     public static final String loginLink = "//a[contains(@href, 'login.php')]";
 
-    public static final String excelSheetLocation = "C:/Users/Admin/Desktop/DemoSiteDDT.xlsx";
+    public static final String excelSheetLocation = "C:/Users/Admin/Desktop/";
 
     public static final String excelSheet = "DemoSiteDDT.xlsx";
 }

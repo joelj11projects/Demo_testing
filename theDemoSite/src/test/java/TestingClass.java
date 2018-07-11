@@ -1,6 +1,9 @@
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.After;
 import org.junit.Before;
@@ -14,6 +17,7 @@ import org.w3c.dom.html.HTMLInputElement;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class TestingClass {
 
@@ -38,44 +42,63 @@ public class TestingClass {
     }
 
     @Test
-    public void methodTest(){
-        driver.manage().window().maximize();
-        driver.get(Constant.theWebsite);
-        landingPage page = PageFactory.initElements(driver,landingPage.class);
-        page.addUser();
-
-        addUserPage addUser = PageFactory.initElements(driver,addUserPage.class);
-        addUser.typeName();
-        addUser.typePass();
-        addUser.clickSave();
-
-        LoginPage logUser = PageFactory.initElements(driver,LoginPage.class);
-        logUser.clickLogin();
-        logUser.typeName();
-        logUser.typePass();
-        logUser.clickLogBtn();
-
-        test = extent.startTest("Verify application");
-        test.log(LogStatus.INFO, "Browser started");
-        test.log(LogStatus.PASS, "verify title of the page");
-
+    public void methodTest() {
         FileInputStream file = null;
         try {
             file = new FileInputStream(Constant.excelSheetLocation + Constant.excelSheet);
-        } catch (FileNotFoundException e) {}
+        } catch (FileNotFoundException e) {
+        }
         XSSFWorkbook workbook = null;
         try {
             workbook = new XSSFWorkbook(file);
 
+        } catch (IOException e) {
+
         }
 
+        XSSFSheet sheet = workbook.getSheetAt(0);
+        for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
+            Cell username = sheet.getRow(i).getCell(0);
+            Cell password = sheet.getRow(i).getCell(1);
+            String user = username.getStringCellValue();
+            String pass = password.getStringCellValue();
 
-        try{
-            Thread.sleep(3000);
-        } catch(Exception e){
-            System.out.println(e);}
+
+
+            //XSSFCell cell = sheet.getRow(0).getCell(0);
+            System.out.println(username.getStringCellValue());
+            System.out.println(password.getStringCellValue());
+
+
+            driver.manage().window().maximize();
+            driver.get(Constant.theWebsite);
+            landingPage page = PageFactory.initElements(driver, landingPage.class);
+            page.addUser();
+
+            addUserPage addUser = PageFactory.initElements(driver, addUserPage.class);
+            addUser.typeName(user);
+            addUser.typePass(pass);
+            addUser.clickSave();
+
+            LoginPage logUser = PageFactory.initElements(driver, LoginPage.class);
+            logUser.clickLogin();
+            logUser.typeName(user);
+            logUser.typePass(pass);
+            logUser.clickLogBtn();
+
+            test = extent.startTest("Verify application");
+            test.log(LogStatus.INFO, "Browser started");
+            test.log(LogStatus.PASS, "verify title of the page");
+
+
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+
     }
-
 
 
 

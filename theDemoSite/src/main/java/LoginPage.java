@@ -13,14 +13,14 @@ public class LoginPage {
     @FindBy(name = "username")
     private WebElement addName;
 
-    public void typeName(){
-        addName.sendKeys("jjjj");
+    public void typeName(String user){
+        addName.sendKeys(user);
     }
 
     @FindBy(name = "password")
     private WebElement addPass;
-    public void typePass() {
-        addPass.sendKeys("1111");
+    public void typePass(String pass) {
+        addPass.sendKeys(pass);
     }
 
     @FindBy(name = "FormsButton2")
